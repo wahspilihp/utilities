@@ -1,0 +1,44 @@
+\ProvidesPackage{rgauss}[2018/08/08]
+\RequirePackage{gauss}
+\makeatletter
+\RequirePackage{etoolbox}
+\RequirePackage{xfp}
+\RequirePackage{xparse}
+\let\rowmultlabel\relax
+\let\rowswapfromlabel\relax
+\let\rowswaptolabel\relax
+\let\rowaddfromlabel\relax
+\let\rowaddtolabel\relax
+\appto{\g@east}{
+	%\let\cdot\times
+	\def\swap{\swapper\rowswapfromlabel\rowswaptolabel}
+	\def\add{\adder\rowaddfromlabel\rowaddtolabel}
+	\def\g@east@mult#1#2{\g@rbox{rx#1}{ry#1}{\ensuremath{\rowmultlabel{#2}R_{\fpeval{{#1}+1}}\longrightarrow R_{\fpeval{{#1}+1}}}}}
+	\let\mult\g@east@mult
+}
+%{R_{#1} {\rowswapfromlabel}\longleftrightarrow{\rowswaptolabel} R_{#2}}
+\NewDocumentCommand{\swapper}{m m O{} O{} m m}{%
+	\g@rbox{rx#5}{ry#5}{%
+		\ensuremath{%
+			{#1{#3}}%
+			% {#1}%
+			R_{\fpeval{{#5}+1}}%
+			\longleftrightarrow%
+			R_{\fpeval{{#6}+1}}%
+			%{#2{#3}}%
+		}%
+	}%
+}
+%{\rowaddfromlabel R_{#1} \rowaddtolabel R_{#2} \longrightarrow R_{#2}}
+\NewDocumentCommand{\adder}{m m O{} O{} m m}{%
+	\g@rbox{rx#6}{ry#6}{%
+		\ensuremath{%
+			{#1{#3}} 
+			R_{\fpeval{{#5}+1}}%
+			+R_{\fpeval{{#6}+1}}
+			\longrightarrow%
+			R_{\fpeval{{#6}+1}}%
+			%{#2{#3}}%
+		}%
+	}%
+}
