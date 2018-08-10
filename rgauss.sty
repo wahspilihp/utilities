@@ -9,12 +9,21 @@
 \let\rowswaptolabel\relax
 \let\rowaddfromlabel\relax
 \let\rowaddtolabel\relax
+\labelskip=3em
 \appto{\g@east}{
 	%\let\cdot\times
 	\def\swap{\swapper\rowswapfromlabel\rowswaptolabel}
 	\def\add{\adder\rowaddfromlabel\rowaddtolabel}
-	\def\g@east@mult#1#2{\g@rbox{rx#1}{ry#1}{\ensuremath{\rowmultlabel{#2}R_{\fpeval{{#1}+1}}\longrightarrow R_{\fpeval{{#1}+1}}}}}
-	\let\mult\g@east@mult
+	\def\g@east@mult#1#2{%
+		\g@rbox{rx#1}{ry#1}{%
+			\ensuremath{\rowmultlabel{#2}R_{\fpeval{{#1}+1}}\longrightarrow R_{\fpeval{{#1}+1}}}
+		}%
+		\g@dim{rx#1}{\g@d@tmpc}\advance\g@d@tmpc\wd\g@label
+	   \g@defdim{rx#1}{\g@d@tmpc}%
+	   \g@advance{rx#1}{\the\labelskip}%
+	   \g@update{sum}{rx#1}%
+	}%
+	\let\mult\g@east@mult%
 }
 %{R_{#1} {\rowswapfromlabel}\longleftrightarrow{\rowswaptolabel} R_{#2}}
 \NewDocumentCommand{\swapper}{m m O{} O{} m m}{%
@@ -28,6 +37,10 @@
 			%{#2{#3}}%
 		}%
 	}%
+	\g@dim{rx#6}{\g@d@tmpc}\advance\g@d@tmpc\wd\g@label
+   \g@defdim{rx#6}{\g@d@tmpc}%
+   \g@advance{rx#6}{\the\labelskip}%
+   \g@update{sum}{rx#6}%
 }
 %{\rowaddfromlabel R_{#1} \rowaddtolabel R_{#2} \longrightarrow R_{#2}}
 \NewDocumentCommand{\adder}{m m O{} O{} m m}{%
@@ -41,4 +54,13 @@
 			%{#2{#3}}%
 		}%
 	}%
+	\typeout{56}
+	\g@dim{rx#6}{\g@d@tmpc}\advance\g@d@tmpc\wd\g@label
+	\typeout{58}
+   \g@defdim{rx#6}{\g@d@tmpc}%
+   \typeout{60}
+   \g@advance{rx#6}{\the\labelskip}%
+   \typeout{62}
+   \g@update{sum}{rx#6}%
+   \typeout{64}
 }
